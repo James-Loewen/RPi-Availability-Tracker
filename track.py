@@ -10,7 +10,7 @@ from rpi_request import get_latest_item
 wait_time = 60
 item = get_latest_item()
 print(item)
-sleep(60)
+sleep(wait_time)
 
 while True:
     new_item = get_latest_item()
@@ -19,6 +19,6 @@ while True:
         sleep(wait_time)
     else:
         item = new_item
-        send_email("Raspberry Pi Stock Update", item)
+        send_email("RPi Stock Update", item)
         print(f"========================================\n{item}")
         sleep(wait_time)
