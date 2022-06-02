@@ -1,0 +1,19 @@
+import os
+import smtplib
+from email.message import EmailMessage
+
+# Sensitive info saved locally as env variables
+EMAIL_ADDRESS = os.environ.get("EMAIL_USER")
+EMAIL_PASSWORD = os.environ.get("EMAIL_PASS")
+PHONE_NUMBER = os.environ.get("PHONE_NUMBER")
+
+def send_email(subject, body):
+    msg = EmailMessage()
+    msg['Subject'] = subject
+    msg['From'] = EMAIL_ADDRESS
+    msg['To'] = ["me@email.com", f"{PHONE_NUMBER}@vtext.com"]
+    msg.set_content(body)
+
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+        smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+        smtp.send_message(msg)
