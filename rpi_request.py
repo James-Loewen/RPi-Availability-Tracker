@@ -36,13 +36,16 @@ def get_latest_item():
             dtobj = datetime.strptime(pub_date_GMT, '%a, %d %b %Y %H:%M:%S %Z')
             dtobj = dtobj.replace(tzinfo=timezone.utc)
             dtobj = dtobj.astimezone(pytz.timezone("US/Eastern"))
-            pub_date_EDT = dtobj.strftime('%a, %d %b %Y %H:%M:%S %p (%Z)')
+            pub_date_EDT = dtobj.strftime('%a, %d %b %Y %I:%M:%S %p (%Z)')
             # item_str = (title, link, pub_date_EDT)
             item_str = f"Title: {title}\nLink: {link}\n{pub_date_EDT}"
         else:
             item_str = f"No current entries"
 
     except requests.exceptions.RequestException as err:
-        print(f"========================================\n{err}")
+        err_time_UTC = datetime.now(timezone.utc)
+        err_time_EDT = err_time_UTC.astimezone(pytz.timezone("US/Eastern"))
+        err_time = err_time_EDT.strftime("%a, %d %b %Y %I:%M%S %p (%Z)")
+        print(f"========================================\n{err}\n{err_time}")
 
     return item_str
