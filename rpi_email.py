@@ -7,6 +7,8 @@ EMAIL_ADDRESS = os.environ.get("EMAIL_USER")
 EMAIL_PASSWORD = os.environ.get("EMAIL_PASS")
 PHONE_NUMBER = os.environ.get("PHONE_NUMBER")
 
+# I believe this is called a void function or procedure
+# I'm not sure if this is considered best-practice or not
 def send_email(subject, body):
     msg = EmailMessage()
     msg['Subject'] = subject

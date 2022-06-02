@@ -15,15 +15,16 @@ def get_latest_item():
 
     try:
         headers = {"User-Agent": FakeUserAgent().random}
-
         res = requests.get("https://rpilocator.com/feed/", headers=headers, params=params)
         res.raise_for_status()
-
+        # I opted to use (and install) the package lxml
         soup = BeautifulSoup(res.text, 'xml')
 
         if soup.channel.item:
             title = soup.channel.item.title.text
             link = soup.channel.item.link.text
+            # This formatting was an after-thought...
+            # I might make this its own module
             pub_date_GMT = soup.channel.item.pubDate.text
             dtobj = datetime.strptime(pub_date_GMT, '%a, %d %b %Y %H:%M:%S %Z')
             dtobj = dtobj.replace(tzinfo=timezone.utc)
