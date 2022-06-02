@@ -6,8 +6,11 @@ from bs4 import BeautifulSoup
 from fake_useragent import UserAgent
 
 params = {
-    "cat": ["PI4", "PIZERO"],
-    "country": ["US", "UK", "CA", "DE"]
+    # options: ["CM4", "PI3", "PI4", "PIZERO"]
+    "cat": ["PIZERO"],
+    # options: AT, BE, CA, CN, FR, DE, IT, JP, NL,
+    #          PL, PT, ZA, ES, SE, CH, UK, US
+    "country": ["US", "CA"]
 }
 
 
@@ -16,7 +19,9 @@ def get_latest_item():
 
     try:
         ua = UserAgent()
-        headers = {"User-Agent": ua.random}
+        # One of the available user-agents may not have worked...
+        # headers = {"User-Agent": ua.random}
+        headers = {"User-Agent": ua.ff} # We'll try just using FireFox U-As
         res = requests.get("https://rpilocator.com/feed/", headers=headers, params=params)
         res.raise_for_status()
         # I opted to use (and install) the package lxml
@@ -38,6 +43,6 @@ def get_latest_item():
             item_str = f"No current entries"
 
     except requests.exceptions.RequestException as err:
-        print(err)
+        print(f"========================================\n{err}")
 
     return item_str
