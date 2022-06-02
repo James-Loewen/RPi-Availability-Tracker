@@ -10,8 +10,9 @@ params = {
     "country": ["US", "UK", "CA", "DE"]
 }
 
+
 def get_latest_item():
-    item_obj = None
+    item_str = None
 
     try:
         headers = {"User-Agent": FakeUserAgent().random}
@@ -30,11 +31,12 @@ def get_latest_item():
             dtobj = dtobj.replace(tzinfo=timezone.utc)
             dtobj = dtobj.astimezone(pytz.timezone("US/Eastern"))
             pub_date_EDT = dtobj.strftime('%a, %d %b %Y %H:%M:%S %p (%Z)')
-
-            item_obj = (title, link, pub_date_EDT)
+            # item_str = (title, link, pub_date_EDT)
+            item_str = f"Title: {title}\nLink: {link}\n{pub_date_EDT}"
+        else:
+            item_str = f"No current entries"
 
     except requests.exceptions.RequestException as err:
-        print(f"========================================\n{err}")
+        print(err)
 
-    return item_obj
-
+    return item_str
