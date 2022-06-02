@@ -6,15 +6,16 @@ from email.message import EmailMessage
 EMAIL_ADDRESS = os.environ.get("EMAIL_USER")
 EMAIL_PASSWORD = os.environ.get("EMAIL_PASS")
 PHONE_NUMBER = os.environ.get("PHONE_NUMBER")
+RECIPIENT = os.environ.get("RECIPIENT")
 
 
-# I believe this is called a void function or procedure
+# I believe this is called a void function or a procedure
 # I'm not sure if this is considered best-practice or not
 def send_email(subject, body):
     msg = EmailMessage()
     msg['Subject'] = subject
     msg['From'] = EMAIL_ADDRESS
-    msg['To'] = ["me@email.com", f"{PHONE_NUMBER}@vtext.com"]
+    msg['To'] = [RECIPIENT, f"{PHONE_NUMBER}@vtext.com"]
     msg.set_content(body)
 
     with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:

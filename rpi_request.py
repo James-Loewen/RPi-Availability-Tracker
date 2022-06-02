@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 import requests
 import pytz
 from bs4 import BeautifulSoup
-from fake_useragent import FakeUserAgent
+from fake_useragent import UserAgent
 
 params = {
     "cat": ["PI4", "PIZERO"],
@@ -15,7 +15,8 @@ def get_latest_item():
     item_str = None
 
     try:
-        headers = {"User-Agent": FakeUserAgent().random}
+        ua = UserAgent()
+        headers = {"User-Agent": ua.random}
         res = requests.get("https://rpilocator.com/feed/", headers=headers, params=params)
         res.raise_for_status()
         # I opted to use (and install) the package lxml
