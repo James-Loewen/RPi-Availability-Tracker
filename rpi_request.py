@@ -45,7 +45,7 @@ def get_latest_item():
     except requests.exceptions.RequestException as err:
         err_time_UTC = datetime.now(timezone.utc)
         err_time_EDT = err_time_UTC.astimezone(pytz.timezone("US/Eastern"))
-        err_time = err_time_EDT.strftime("%a, %d %b %Y %I:%M%S %p (%Z)")
+        err_time = err_time_EDT.strftime("%a, %d %b %Y %I:%M:%S %p (%Z)")
         print(f"========================================\n{err}\n{err_time}")
 
     return item_str
