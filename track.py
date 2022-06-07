@@ -17,12 +17,12 @@ finally:
 
 try:
     with open(os.path.join(log_path, f"{today.strftime(date_format)}.log")) as log:
-        last_item = [line.strip() for line in log.read().split("========================================")][-1].strip()
+        last_item = [line.strip() for line in log.read().split("="*40)][-1].strip()
 except FileNotFoundError:
     try:
         yesterday = today - timedelta(days=1)
         with open(os.path.join(log_path, f"{yesterday.strftime(date_format)}.log")) as log:
-            last_item = [line.strip() for line in log.read().split("========================================")][-1].strip()
+            last_item = [line.strip() for line in log.read().split("="*40)][-1].strip()
     except FileNotFoundError:
         last_item = ['']
 
@@ -30,4 +30,5 @@ new_item = Item()
 
 if new_item.title is not None and f"{new_item.title}\n{new_item.link}\n{new_item.date}" != last_item:
     with open(os.path.join(log_path, f"{today.strftime(date_format)}.log"), "a") as log:
-        log.write(f"========================================\n{new_item.title}\n{new_item.link}\n{new_item.date}\n")
+        log.write(f"{'='*40}\n{new_item.title}\n{new_item.link}\n{new_item.date}\n")
+    send_email(new_item.title, f"{new_item.link}\n{new_item.date}")

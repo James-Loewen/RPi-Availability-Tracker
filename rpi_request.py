@@ -24,7 +24,7 @@ def handle_error(err):
         err_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), "error-files")
     err_date = datetime.now()
     with open(os.path.join(err_path, f"{err_date.strftime('%Y-%m-%d')}.error"), "a") as err_file:
-        err_file.write(f"========================================\n{err}\n{err_date.strftime('%Y-%m-%d %I:%M:%S %p')}\n")
+        err_file.write(f"{'='*40}\n{err}\n{err_date.strftime('%Y-%m-%d %I:%M:%S %p')}\n")
 
 
 def get_latest_item():
@@ -55,18 +55,7 @@ def get_latest_item():
     return title, link, pub_date_EDT
 
 
-class Item():
+class Item:
     def __init__(self):
         result = get_latest_item()
         self.title, self.link, self.date = result
-
-# newest = Item()
-#
-# # print(newest.title)
-# # print(newest.link)
-# # print(newest.date)
-#
-# with open("butt.log") as log:
-#     data = log.read().split("========================================")[-1].strip()
-#
-# print(data == f"{newest.title}\n{newest.link}\n{newest.date}" or newest.title == None)
