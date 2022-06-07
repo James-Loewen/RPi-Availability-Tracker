@@ -16,10 +16,15 @@ params = {
 
 
 def handle_error(err):
+    try:
+        os.mkdir(os.path.join(os.path.abspath(os.path.dirname(__file__)), "error-files"))
+    except FileExistsError:
+        pass
+    finally:
+        err_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), "error-files")
     err_date = datetime.now()
-    with open(os.path.join("C:\\Users\\james\\Desktop\\programming\\Python Codes\\RPi Email\\error-files",
-                           f"{err_date.strftime('%Y-%m-%d')}.error"), "a") as err_file:
-        err_file.write(f"========================================\n{err}\n{err_date.strftime('%I:%M:%S %p')}")
+    with open(os.path.join(err_path, f"{err_date.strftime('%Y-%m-%d')}.error"), "a") as err_file:
+        err_file.write(f"========================================\n{err}\n{err_date.strftime('%Y-%m-%d %I:%M:%S %p')}\n")
 
 
 def get_latest_item():
@@ -29,9 +34,7 @@ def get_latest_item():
 
     try:
         ua = UserAgent()
-        # One of the available user-agents may not have worked...
-        # headers = {"User-Agent": ua.random}
-        headers = {"User-Agent": ua.ff}  # We'll try just using FireFox U-As
+        headers = {"User-Agent": ua.ff}
         # res = requests.get("https://rpilocator.com/feed/", headers=headers, params=params)
         res = requests.get("https://rpilocator.com/feed/", headers=headers)
         res.raise_for_status()
@@ -40,14 +43,11 @@ def get_latest_item():
         if soup.channel.item:
             title = soup.channel.item.title.text
             link = soup.channel.item.link.text
-            # This formatting was an after-thought...
-            # I might make this its own module
             pub_date_GMT = soup.channel.item.pubDate.text
             dtobj = datetime.strptime(pub_date_GMT, '%a, %d %b %Y %H:%M:%S %Z')
             dtobj = dtobj.replace(tzinfo=timezone.utc)
             dtobj = dtobj.astimezone(pytz.timezone("US/Eastern"))
             pub_date_EDT = dtobj.strftime('%a, %d %b %Y %I:%M:%S %p (%Z)')
-            # return title, link, pub_date_EDT
 
     except requests.exceptions.RequestException as err:
         handle_error(err)
@@ -60,3 +60,13 @@ class Item():
         result = get_latest_item()
         self.title, self.link, self.date = result
 
+# newest = Item()
+#
+# # print(newest.title)
+# # print(newest.link)
+# # print(newest.date)
+#
+# with open("butt.log") as log:
+#     data = log.read().split("========================================")[-1].strip()
+#
+# print(data == f"{newest.title}\n{newest.link}\n{newest.date}" or newest.title == None)

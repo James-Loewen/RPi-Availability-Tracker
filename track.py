@@ -1,36 +1,33 @@
 #!/usr/bin/env python3
-import os
+import os.path
 from datetime import datetime, timedelta
 
 from send_email import send_email
-from rpi_request import get_latest_item
+from rpi_request import Item
 
 date_format = "%Y-%m-%d"
 today = datetime.now()
 
 try:
-    with open(f"{today.strftime(date_format)}.log") as log:
-        data = [line.strip() for line in log.read().split("========================================")][-1]
+    os.mkdir(os.path.join(os.path.abspath(os.path.dirname(__file__)), "log-files"))
+except FileExistsError:
+    pass
+finally:
+    log_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), "log-files")
+
+try:
+    with open(os.path.join(log_path, f"{today.strftime(date_format)}.log")) as log:
+        last_item = [line.strip() for line in log.read().split("========================================")][-1].strip()
 except FileNotFoundError:
-    yesterday = today - timedelta(days=1)
-    with open(f"{yesterday.strftime(date_format)}.log") as log:
-        data = [line.strip() for line in log.read().split("========================================")][-1]
+    try:
+        yesterday = today - timedelta(days=1)
+        with open(os.path.join(log_path, f"{yesterday.strftime(date_format)}.log")) as log:
+            last_item = [line.strip() for line in log.read().split("========================================")][-1].strip()
+    except FileNotFoundError:
+        last_item = ['']
 
-with open(f"{today.strftime(date_format)}.log", "a") as log:
-    # log.write("========================================\nEat a whole hard-boiled egg, you fuck\nAll right, you don't actually have to...\n")
-    log.write(f"\n========================================\n{data}")
+new_item = Item()
 
-# item = get_latest_item()
-# print(item)
-# sleep(wait_time)
-#
-# while True:
-#     new_item = get_latest_item()
-#
-#     if new_item == item or new_item == None:
-#         sleep(wait_time)
-#     else:
-#         item = new_item
-#         send_email("RPi Stock Update", item)
-#         print(f"========================================\n{item}")
-#         sleep(wait_time)
+if new_item.title is not None and f"{new_item.title}\n{new_item.link}\n{new_item.date}" != last_item:
+    with open(os.path.join(log_path, f"{today.strftime(date_format)}.log"), "a") as log:
+        log.write(f"========================================\n{new_item.title}\n{new_item.link}\n{new_item.date}\n")
