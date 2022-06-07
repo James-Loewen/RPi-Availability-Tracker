@@ -25,9 +25,9 @@ def handle_error(err):
     err_date = datetime.now()
     with open(os.path.join(err_path, f"{err_date.strftime('%Y-%m-%d')}.error"), "a") as err_file:
         if err_file.tell() == 0:
-            err_file.write(f"{err}\n{err_date.strftime('%Y-%m-%d %I:%M:%S %p')}\n")
+            err_file.write(f"{err}\n{err_date.strftime('%a, %d %b %Y %I:%M:%S %p')}\n")
         else:
-            err_file.write(f"{'='*40}\n{err}\n{err_date.strftime('%Y-%m-%d %I:%M:%S %p')}\n")
+            err_file.write(f"{'='*40}\n{err}\n{err_date.strftime('%a, %d %b %Y %I:%M:%S %p')}\n")
 
 
 
@@ -39,19 +39,18 @@ def get_latest_item():
     try:
         ua = UserAgent()
         headers = {"User-Agent": ua.ff}
-        # res = requests.get("https://rpilocator.com/feed/", headers=headers, params=params)
-        res = requests.get("https://rpilocator.com/feed/", headers=headers)
+        res = requests.get("https://rpilocator.com/feed/", headers=headers, params=params)
         res.raise_for_status()
-        soup = BeautifulSoup(res.text, 'xml')
+        soup = BeautifulSoup(res.text, "xml")
 
         if soup.channel.item:
             title = soup.channel.item.title.text
             link = soup.channel.item.link.text
             pub_date_GMT = soup.channel.item.pubDate.text
-            dtobj = datetime.strptime(pub_date_GMT, '%a, %d %b %Y %H:%M:%S %Z')
+            dtobj = datetime.strptime(pub_date_GMT, "%a, %d %b %Y %H:%M:%S %Z")
             dtobj = dtobj.replace(tzinfo=timezone.utc)
             dtobj = dtobj.astimezone(pytz.timezone("US/Eastern"))
-            pub_date_EDT = dtobj.strftime('%a, %d %b %Y %I:%M:%S %p (%Z)')
+            pub_date_EDT = dtobj.strftime("%a, %d %b %Y %I:%M:%S %p (%Z)")
 
     except requests.exceptions.RequestException as err:
         handle_error(err)
