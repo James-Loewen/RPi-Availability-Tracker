@@ -1,3 +1,4 @@
+import os.path
 from datetime import datetime, timezone
 
 import requests
@@ -14,17 +15,26 @@ params = {
 }
 
 
+def handle_error(err):
+    err_date = datetime.now()
+    with open(os.path.join("C:\\Users\\james\\Desktop\\programming\\Python Codes\\RPi Email\\error-files",
+                           f"{err_date.strftime('%Y-%m-%d')}.error"), "a") as err_file:
+        err_file.write(f"========================================\n{err}\n{err_date.strftime('%I:%M:%S %p')}")
+
+
 def get_latest_item():
-    item_str = None
+    title = None
+    link = None
+    pub_date_EDT = None
 
     try:
         ua = UserAgent()
         # One of the available user-agents may not have worked...
         # headers = {"User-Agent": ua.random}
-        headers = {"User-Agent": ua.ff} # We'll try just using FireFox U-As
-        res = requests.get("https://rpilocator.com/feed/", headers=headers, params=params)
+        headers = {"User-Agent": ua.ff}  # We'll try just using FireFox U-As
+        # res = requests.get("https://rpilocator.com/feed/", headers=headers, params=params)
+        res = requests.get("https://rpilocator.com/feed/", headers=headers)
         res.raise_for_status()
-        # I opted to use (and install) the package lxml
         soup = BeautifulSoup(res.text, 'xml')
 
         if soup.channel.item:
@@ -37,15 +47,16 @@ def get_latest_item():
             dtobj = dtobj.replace(tzinfo=timezone.utc)
             dtobj = dtobj.astimezone(pytz.timezone("US/Eastern"))
             pub_date_EDT = dtobj.strftime('%a, %d %b %Y %I:%M:%S %p (%Z)')
-            # item_str = (title, link, pub_date_EDT)
-            item_str = f"Title: {title}\nLink: {link}\n{pub_date_EDT}"
-        else:
-            item_str = f"No current entries"
+            # return title, link, pub_date_EDT
 
     except requests.exceptions.RequestException as err:
-        err_time_UTC = datetime.now(timezone.utc)
-        err_time_EDT = err_time_UTC.astimezone(pytz.timezone("US/Eastern"))
-        err_time = err_time_EDT.strftime("%a, %d %b %Y %I:%M:%S %p (%Z)")
-        print(f"========================================\n{err}\n{err_time}")
+        handle_error(err)
 
-    return item_str
+    return title, link, pub_date_EDT
+
+
+class Item():
+    def __init__(self):
+        result = get_latest_item()
+        self.title, self.link, self.date = result
+
