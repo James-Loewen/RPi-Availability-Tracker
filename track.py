@@ -30,7 +30,7 @@ new_item = Item()
 
 if new_item.title is not None and f"{new_item.title}\n{new_item.link}\n{new_item.date}" != last_item:
     with open(os.path.join(log_path, f"{today.strftime(date_format)}.log"), "a") as log:
-        if last_item == ['']:
+        if log.tell() == 0:
             log.write(f"{new_item.title}\n{new_item.link}\n{new_item.date}\n")
         else:
             log.write(f"{'='*40}\n{new_item.title}\n{new_item.link}\n{new_item.date}\n")

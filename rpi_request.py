@@ -24,7 +24,11 @@ def handle_error(err):
         err_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), "error-files")
     err_date = datetime.now()
     with open(os.path.join(err_path, f"{err_date.strftime('%Y-%m-%d')}.error"), "a") as err_file:
-        err_file.write(f"{'='*40}\n{err}\n{err_date.strftime('%Y-%m-%d %I:%M:%S %p')}\n")
+        if err_file.tell() == 0:
+            err_file.write(f"{err}\n{err_date.strftime('%Y-%m-%d %I:%M:%S %p')}\n")
+        else:
+            err_file.write(f"{'='*40}\n{err}\n{err_date.strftime('%Y-%m-%d %I:%M:%S %p')}\n")
+
 
 
 def get_latest_item():
