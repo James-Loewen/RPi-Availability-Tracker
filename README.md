@@ -104,7 +104,7 @@ ps aux | grep "track.py" | grep -v grep
 ```
 You should get a result that looks like this:
 ```bash
-pi       17704  0.6  0.3  14688  7376 pts/0    S    23:37   0:00 {...}/python -u track.py
+pi       17704  0.6  0.3  14688  7376 pts/0    S    23:37   0:00 python -u {...}/track.py
 ```
 That first number, **17704** is the PID. To kill it, use the command:
 ```bash
