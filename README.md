@@ -88,7 +88,7 @@ There's a lot going on with this command so I'll break it down:
 ```bash
 [1]+  Stopped                 nohup python -u {path to repo}/RPi-Availability-Tracker/track.py >> rpi_inventory.log 2>> rpi_tracking_errors.log
 ```
-The number in backets is the job ID. You can also get this by using the jobs command. To move your process to the background, simply run the command:
+The number in brackets is the job ID. You can also get this by using the jobs command. To move your process to the background, simply run the command:
 ```bash
 bg 1
 ```
