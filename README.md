@@ -195,4 +195,4 @@ Then you can ommit "python" from the command:
 
 Type Ctrl+X, then y, then hit ENTER and you're finished!
 
-Between the two, I prefer this method of handling a repetitive process, but I'm only just learning! Forks and pull requests welcomme. Let me know if I should be structuring my imports or modules differently or if my spacing is wonky or something.
+Between the two, I prefer this method of handling a repetitive process, but I'm only just learning! Forks and pull requests welcome. Let me know if I should be structuring my imports or modules differently or if my spacing is wonky or something.
