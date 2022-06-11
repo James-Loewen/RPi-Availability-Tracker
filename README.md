@@ -1,5 +1,8 @@
 # RPi-Availability-Tracker
-I wanted to see if I could out-bot the scalpers and get my hands on a Raspberry Pi 4 and Zero 2 W so I started this project!
+
+Due to a surge in demand (and some other stuff) Rasberry Pi's are super difficult to get your hands on! I want to see if I can beat the bots and the scalpers and get my hands on a Raspberry Pi 4 and Zero 2 W!\
+So I started this project to make a program that checks the [rpilocator.com/feed/](rpilocator.com/feed/) RSS feed every minute, logs changes and emails me notifications.
+
 ##### Table of Contents
 [[main] Branch](#main-branch)
 * [Implementing the main Branch](#implement-main)
