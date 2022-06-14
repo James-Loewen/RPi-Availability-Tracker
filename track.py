@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import os.path
-from datetime import datetime, timedelta
+from datetime import datetime
+from glob import iglob
 
 from send_email import send_email
 from rpi_request import Item
@@ -20,8 +21,8 @@ try:
         last_item = [line.strip() for line in log.read().split("="*40)][-1].strip()
 except FileNotFoundError:
     try:
-        yesterday = today - timedelta(days=1)
-        with open(os.path.join(log_path, f"{yesterday.strftime(date_format)}.log")) as log:
+        last_log = max(iglob(os.path.join(log_path, "*.log")), key=os.path.getctime)
+        with open(last_log) as log:
             last_item = [line.strip() for line in log.read().split("="*40)][-1].strip()
     except FileNotFoundError:
         last_item = ['']
