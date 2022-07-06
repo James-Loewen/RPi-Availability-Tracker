@@ -1,3 +1,4 @@
 log-files/
+error-files/
 __pycache__/
 .idea/
