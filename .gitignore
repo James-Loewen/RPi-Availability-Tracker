@@ -1,4 +1,5 @@
 log-files/
 error-files/
+tests/
 __pycache__/
 .idea/
